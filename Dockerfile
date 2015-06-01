@@ -1,6 +1,5 @@
 ###############################################
 # Ubuntu with added Teamspeak 3 Server. 
-# Uses SQLite Database on default.
 ###############################################
 
 # Using latest Ubuntu image as base
@@ -20,7 +19,10 @@ ADD ${TEAMSPEAK_URL} /opt/
 RUN cd /opt && tar -xzf /opt/teamspeak3-server_linux-amd64-3*.tar.gz
 
 ADD /scripts/ /opt/scripts/
+ADD /config/ /opt/config/
+
 RUN chmod -R 774 /opt/scripts/
+RUn chmod -R 774 /opt/config/
 
 ENTRYPOINT ["/opt/scripts/docker-ts3.sh"]
 #CMD ["-w", "/teamspeak3/query_ip_whitelist.txt", "-b", "/teamspeak3/query_ip_blacklist.txt", "-o", "/teamspeak3/logs/", "-l", "/teamspeak3/"]

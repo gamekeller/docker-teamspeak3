@@ -2,11 +2,6 @@
 VOLUME=/teamspeak3
 
 echo " ----- docker-ts3 ------"
-echo "1. Check if ts3server.sqlitedb exists in host-mounted volume."
-if [ -f $VOLUME/ts3server.sqlitedb ]
-  then
-    echo "$VOLUME/ts3server.sqlitedb found. Creating Link between host-mounted db-file and ts3-folder."
-	ln -s $VOLUME/ts3server.sqlitedb /opt/teamspeak3-server_linux-amd64/ts3server.sqlitedb 
 fi
 
 echo "2. Link the files-folder into the host-mounted volume."
@@ -28,6 +23,10 @@ if [ -f $VOLUME/ts3server.ini ]; then
 	echo "inifile='/teamspeak3/ts3server.ini'"
 	/opt/teamspeak3-server_linux-amd64/ts3server_minimal_runscript.sh \
 		inifile="/teamspeak3/ts3server.ini"
+elif [ -f $VOLUME/config/ts3server.ini ]; then
+    echo "$VOLUME/config/ts3server.ini found. Using ini as config file."
+	/opt/teamspeak3-server_linux-amd64/ts3server_minimal_runscript.sh \
+		inifile="/teamspeak3/config/ts3server.ini"
 else
 	echo "$VOLUME/ts3server.ini not found. Creating new config file."
 	/opt/teamspeak3-server_linux-amd64/ts3server_minimal_runscript.sh \
