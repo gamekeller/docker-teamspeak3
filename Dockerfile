@@ -14,7 +14,7 @@ MAINTAINER juri@schreib.at
 # Teamspeak Version
 ENV TEAMSPEAK_VERSION=3.0.11.3
 # Download Link of TS3 Server
-ENV   TEAMSPEAK_URL=http://dl.4players.de/ts/releases/${TEAMSPEAK_VERSION}/teamspeak3-server_linux-amd64-${TEAMSPEAK_VERSION}.tar.gz
+ENV TEAMSPEAK_URL=http://dl.4players.de/ts/releases/${TEAMSPEAK_VERSION}/teamspeak3-server_linux-amd64-${TEAMSPEAK_VERSION}.tar.gz
 
 # Inject a Volume for any TS3-Data that needs to be persisted or to be accessible from the host. (e.g. for Backups)
 VOLUME ["/teamspeak3"]
@@ -23,17 +23,15 @@ VOLUME ["/teamspeak3"]
 ADD http://ftp.de.debian.org/debian/pool/main/m/mariadb-client-lgpl/libmariadb2_2.0.0-1_amd64.deb /
 RUN dpkg -i libmariadb2_2.0.0-1_amd64.deb
 
+#Required env variable for Teamspeak to detect the lib
+ENV LD_LIBRARY_PATH="/opt/teamspeak3-server_linux-amd64:"
+
 
 # Download TS3 file and extract it into /opt.
 ADD ${TEAMSPEAK_URL} /opt/
-RUN cd /opt && tar -xzf /opt/teamspeak3-server_linux-amd64-3*.tar.gz
+RUN cd /opt && tar -xzf /opt/teamspeak3-server_linux-amd64-${TEAMSPEAK_VERSION}.tar.gz
 
-ADD /scripts/ /opt/scripts/
-
-RUN chmod -R 774 /opt/scripts
-
-ENTRYPOINT ["/opt/scripts/docker-ts3.sh"]
-#CMD ["-w", "/teamspeak3/query_ip_whitelist.txt", "-b", "/teamspeak3/query_ip_blacklist.txt", "-o", "/teamspeak3/logs/", "-l", "/teamspeak3/"]
+ENTRYPOINT ["/opt/teamspeak3-server_linux-amd64/ts3server_linux_amd64","inifile=/teamspeak3/ts3server.ini"]
 
 # Expose the Standard TS3 port.
 EXPOSE 9987/udp
