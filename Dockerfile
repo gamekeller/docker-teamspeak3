@@ -31,9 +31,6 @@ ADD ${MARIADB_CONNECTOR_URL} /opt/
 ADD ${TEAMSPEAK_URL} /opt/
 RUN cd /opt/ && tar -xzf mariadb-connector-c-${MARIADB_CONNECTOR_VERSION}-linux-x86_64.tar.gz && \
 	tar -xzf teamspeak3-server_linux-amd64-${TEAMSPEAK_VERSION}.tar.gz && \
-	ls /opt && \
-	ls /opt/mariadb-connector-c-${MARIADB_CONNECTOR_VERSION}-linux-x86_64/ && \
-	ls /opt/mariadb-connector-c-${MARIADB_CONNECTOR_VERSION}-linux-x86_64/lib/ && \
 	mv /opt/mariadb-connector-c-${MARIADB_CONNECTOR_VERSION}-linux-x86_64/lib/mariadb/libmariadb.so.2 /opt/teamspeak3-server_linux-amd64/ && \
 	rm /opt/*.tar.gz
 
